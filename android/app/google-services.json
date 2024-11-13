@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "350212176095",
+    "firebase_url": "https://flash-card-ac557-default-rtdb.firebaseio.com",
+    "project_id": "flash-card-ac557",
+    "storage_bucket": "flash-card-ac557.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350212176095:android:f6852b14548a172fbb516a",
+        "android_client_info": {
+          "package_name": "com.example.flash_card_ass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSp3e6flbzviw9y3ZVc1_VxRYtMfCsOTE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
