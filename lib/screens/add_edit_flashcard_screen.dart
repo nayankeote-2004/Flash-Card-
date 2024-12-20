@@ -38,7 +38,7 @@ class _AddEditFlashcardScreenState extends State<AddEditFlashcardScreen> {
         final flashcardData = {
           'question': _questionController.text.trim(),
           'answer': _answerController.text.trim(),
-          'createdAt': FieldValue.serverTimestamp(),
+          'createdAt': DateTime.now(),
         };
 
         if (widget.flashcard == null) {
@@ -58,9 +58,11 @@ class _AddEditFlashcardScreenState extends State<AddEditFlashcardScreen> {
 
         Navigator.pop(context, true);
       } catch (e) {
+        print(e);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Error saving flashcard. Please try again.'),
+
             backgroundColor: Colors.red,
           ),
         );

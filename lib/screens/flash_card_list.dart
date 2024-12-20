@@ -12,7 +12,8 @@ class FlashcardListScreen extends StatefulWidget {
   _FlashcardListScreenState createState() => _FlashcardListScreenState();
 }
 
-class _FlashcardListScreenState extends State<FlashcardListScreen> with SingleTickerProviderStateMixin {
+class _FlashcardListScreenState extends State<FlashcardListScreen>
+    with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   bool _showAnswer = false;
   AnimationController? _animationController;
@@ -195,19 +196,6 @@ class _FlashcardListScreenState extends State<FlashcardListScreen> with SingleTi
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue),
-                  onPressed: () => _navigateToEdit(flashcard),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => _confirmDelete(context, widget.userId, flashcard.id),
-                ),
-              ],
-            ),
             Expanded(
               child: Center(
                 child: Column(
