@@ -94,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 SizedBox(height: 24),
                 // Welcome Text
-                Text(
+                const Text(
                   'Create Account',
                   style: TextStyle(
                     fontSize: 28,
@@ -104,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8),
-                Text(
+                const Text(
                   'Sign up to start creating flashcards',
                   style: TextStyle(
                     fontSize: 16,
@@ -182,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.red,
                         fontSize: 14,
                       ),
@@ -200,7 +200,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   child: _isLoading
-                      ? SizedBox(
+                      ? const SizedBox(
                     height: 20,
                     width: 20,
                     child: CircularProgressIndicator(
@@ -208,7 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                      : Text(
+                      : const Text(
                     'Create Account',
                     style: TextStyle(fontSize: 16),
                   ),
@@ -218,7 +218,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Already have an account? ",
                       style: TextStyle(color: Colors.black54),
                     ),

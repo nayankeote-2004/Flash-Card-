@@ -105,7 +105,8 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
             }
 
             final flashcards = snapshot.data!.docs.map((doc) {
-              return Flashcard.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+              return Flashcard.fromMap(
+                  doc.id, doc.data() as Map<String, dynamic>);
             }).toList();
 
             if (flashcards.isEmpty) {
@@ -140,7 +141,8 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => AddEditFlashcardScreen(userId: widget.userId)),
+            MaterialPageRoute(
+                builder: (_) => AddEditFlashcardScreen(userId: widget.userId)),
           );
         },
       ),
@@ -149,6 +151,7 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
 
   Widget _buildFlippableCard(Flashcard flashcard) {
     final angle = (_flipAnimation?.value ?? 0);
+    //ignore: unused_local_variable
     final isBack = angle >= pi / 2;
 
     return GestureDetector(
@@ -156,7 +159,7 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
       onLongPress: () => _showEditDeleteOptions(context, flashcard),
       child: TweenAnimationBuilder(
         tween: Tween<double>(begin: 0, end: angle),
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 20),
         builder: (BuildContext context, double value, Widget? child) {
           return Transform(
             alignment: Alignment.center,
@@ -165,10 +168,10 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
               ..rotateY(value),
             child: value >= pi / 2
                 ? Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()..rotateY(pi),
-              child: _buildCardSide(flashcard, true),
-            )
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..rotateY(pi),
+                    child: _buildCardSide(flashcard, true),
+                  )
                 : _buildCardSide(flashcard, false),
           );
         },
@@ -226,11 +229,11 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  'Tap to flip',
+                  'Tap to flip \nTap and hold to edit and delete',
                   style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
           ],
@@ -287,7 +290,7 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
     );
   }
 
-  void _showEditDeleteOptions(BuildContext context, Flashcard flashcard) {
+  /*void _showEditDeleteOptions(BuildContext context, Flashcard flashcard) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -312,10 +315,110 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
         ],
       ),
     );
+  }*/
+
+  void _showEditDeleteOptions(BuildContext context, Flashcard flashcard) {
+    final Color primaryBlue = Color(0xFF2196F3);
+    final Color lightBlue = Color(0xFFE3F2FD);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24.0,
+            top: 24.0,
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(20),
+              bottom: Radius.circular(20),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Handle bar at the top
+                  Container(
+                    margin: const EdgeInsets.only(top: 12, bottom: 8),
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      _navigateToEdit(flashcard);
+                    },
+                    leading: Icon(Icons.edit, color: primaryBlue),
+                    title: Text(
+                      'Edit',
+                      style: TextStyle(
+                        color: primaryBlue,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    tileColor: Colors.white,
+                    hoverColor: lightBlue,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 8.0,
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Colors.grey[200],
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      _confirmDelete(context, widget.userId, flashcard.id);
+                    },
+                    leading: Icon(Icons.delete_outline, color: Colors.red[700]),
+                    title: Text(
+                      'Delete',
+                      style: TextStyle(
+                        color: Colors.red[700],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    tileColor: Colors.white,
+                    hoverColor: Colors.red[50],
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 8.0,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _confirmDelete(BuildContext context, String userId, String flashcardId) {
-    showDialog(
+    /*showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -340,6 +443,210 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
           ),
         ],
       ),
+    );*/
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFFFFF5F5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: Colors.red, width: 2),
+        ),
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18),
+                  topRight: Radius.circular(18),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const Center(
+                child: Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Text(
+                    'Alert!',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Are you sure you want to delete this flashcard? This action cannot be undone.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1, color: Colors.red),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                    ),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.red, Color(0xFF8B0000)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(userId)
+                            .collection('flashcards')
+                            .doc(flashcardId)
+                            .delete();
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
+}
+
+void showDeleteDialog(BuildContext context, String userId, String flashcardId) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(color: Colors.blue, width: 1.5),
+      ),
+      backgroundColor: Colors.white,
+      elevation: 8,
+      icon: const Icon(
+        Icons.delete_rounded,
+        color: Colors.blue,
+        size: 32,
+      ),
+      title: const Text(
+        'Delete Flashcard',
+        style: TextStyle(
+          color: Colors.blue,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      content: const Text(
+        'Are you sure you want to delete this flashcard? This action cannot be undone.',
+        style: TextStyle(
+          color: Color(0xFF4A90E2),
+          fontSize: 16,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      actionsPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.blue, width: 1.5),
+            ),
+          ),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .collection('flashcards')
+                .doc(flashcardId)
+                .delete();
+            Navigator.pop(context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 0,
+          ),
+          child: const Text(
+            'Delete',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

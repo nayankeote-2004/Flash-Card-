@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 24),
                 // Welcome Text
-                Text(
+                const Text(
                   'Welcome Back!',
                   style: TextStyle(
                     fontSize: 28,
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8),
-                Text(
+                const Text(
                   'Login to access your flashcards',
                   style: TextStyle(
                     fontSize: 16,
@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   child: _isLoading
-                      ? SizedBox(
+                      ? const SizedBox(
                     height: 20,
                     width: 20,
                     child: CircularProgressIndicator(
