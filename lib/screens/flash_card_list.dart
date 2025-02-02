@@ -63,11 +63,21 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
   }
 
   void _previousCard(int totalCards) {
-    setState(() {
-      _currentIndex = (_currentIndex - 1 + totalCards) % totalCards;
-      _showAnswer = false;
-    });
-    _animationController?.reset();
+    if (totalCards > 1) {
+      setState(() {
+        _currentIndex = (_currentIndex - 1 + totalCards) % totalCards;
+        _showAnswer = false;
+      });
+      _animationController?.reset();
+    }
+  }
+
+  void _validateCurrentIndex(int totalCards) {
+    if (totalCards == 0) {
+      _currentIndex = 0;
+    } else if (_currentIndex >= totalCards) {
+      _currentIndex = totalCards - 1;
+    }
   }
 
   @override
@@ -108,6 +118,8 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
               return Flashcard.fromMap(
                   doc.id, doc.data() as Map<String, dynamic>);
             }).toList();
+
+            _validateCurrentIndex(flashcards.length);
 
             if (flashcards.isEmpty) {
               return const Center(
@@ -290,33 +302,6 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
     );
   }
 
-  /*void _showEditDeleteOptions(BuildContext context, Flashcard flashcard) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: const Text('Edit or Delete'),
-        content: const Text('Choose an option:'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _navigateToEdit(flashcard);
-            },
-            child: const Text('Edit'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _confirmDelete(context, widget.userId, flashcard.id);
-            },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-  }*/
-
   void _showEditDeleteOptions(BuildContext context, Flashcard flashcard) {
     final Color primaryBlue = Color(0xFF2196F3);
     final Color lightBlue = Color(0xFFE3F2FD);
@@ -418,32 +403,6 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
   }
 
   void _confirmDelete(BuildContext context, String userId, String flashcardId) {
-    /*showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: const Text('Delete Flashcard'),
-        content: const Text('Are you sure you want to delete this flashcard?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(userId)
-                  .collection('flashcards')
-                  .doc(flashcardId)
-                  .delete();
-              Navigator.pop(context);
-            },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );*/
 
     showDialog(
       context: context,
@@ -537,6 +496,8 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
                             .doc(flashcardId)
                             .delete();
                         Navigator.pop(context);
+
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
