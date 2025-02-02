@@ -148,8 +148,8 @@ class _FlashcardListScreenState extends State<FlashcardListScreen>
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
         backgroundColor: Colors.blue,
+        child:  const Icon(Icons.add),
         onPressed: () {
           Navigator.push(
             context,
